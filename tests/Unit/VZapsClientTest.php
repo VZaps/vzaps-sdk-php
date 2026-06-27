@@ -10,7 +10,6 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\RequestInterface;
 use VZaps\Sdk\Exceptions\VZapsRateLimitException;
 use VZaps\Sdk\Models\Common\InstanceCreateRequest;
 use VZaps\Sdk\Models\Messages\SendTextMessageRequest;
