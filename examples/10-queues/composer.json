@@ -1,0 +1,17 @@
+{
+    "name": "vzaps/example-10-queues",
+    "description": "VZaps PHP SDK example: queues",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": "^8.1",
+        "ext-json": "*",
+        "vzaps/sdk": "^0.1"
+    },
+    "scripts": {
+        "start": "php run.php"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

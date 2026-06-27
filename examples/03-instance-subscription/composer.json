@@ -1,0 +1,17 @@
+{
+    "name": "vzaps/example-03-instance-subscription",
+    "description": "VZaps PHP SDK example: instance subscription",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": "^8.1",
+        "ext-json": "*",
+        "vzaps/sdk": "^0.1"
+    },
+    "scripts": {
+        "start": "php run.php"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

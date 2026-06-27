@@ -1,0 +1,51 @@
+{
+    "name": "vzaps/sdk",
+    "description": "Official PHP SDK for the VZaps public API.",
+    "type": "library",
+    "license": "MIT",
+    "homepage": "https://docs.vzaps.com",
+    "keywords": [
+        "vzaps",
+        "whatsapp",
+        "api",
+        "sdk",
+        "php"
+    ],
+    "autoload": {
+        "psr-4": {
+            "VZaps\\Sdk\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "VZaps\\Sdk\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^8.1",
+        "ext-json": "*",
+        "guzzlehttp/guzzle": "^7.8",
+        "psr/http-client": "^1.0",
+        "psr/http-factory": "^1.1",
+        "psr/http-message": "^1.1 || ^2.0"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.64",
+        "mockery/mockery": "^1.6",
+        "phpstan/phpstan": "^1.11 || ^2.0",
+        "phpunit/phpunit": "^10.5 || ^11.0"
+    },
+    "suggest": {
+        "textalk/websocket": "Required only when using the realtime WebSocket subscription transport."
+    },
+    "scripts": {
+        "analyse": "phpstan analyse",
+        "cs:check": "php-cs-fixer fix --dry-run --diff",
+        "cs:fix": "php-cs-fixer fix",
+        "test": "phpunit"
+    },
+    "config": {
+        "allow-plugins": {},
+        "sort-packages": true
+    }
+}
