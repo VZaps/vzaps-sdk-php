@@ -81,8 +81,18 @@ jobs:
         with:
           generate_release_notes: true
 
+      - name: Ensure Packagist credentials
+        env:
+          PACKAGIST_USERNAME: ${{ secrets.PACKAGIST_USERNAME }}
+          PACKAGIST_TOKEN: ${{ secrets.PACKAGIST_TOKEN }}
+        run: |
+          if [ -z "$PACKAGIST_USERNAME" ] || [ -z "$PACKAGIST_TOKEN" ]; then
+            echo "::error::Missing PACKAGIST_USERNAME or PACKAGIST_TOKEN in the packagist GitHub Environment."
+            echo "Add both secrets under Settings → Environments → packagist, or enable the GitHub hook on https://packagist.org/packages/vzaps/sdk"
+            exit 1
+          fi
+
       - name: Notify Packagist
-        if: ${{ env.PACKAGIST_USERNAME != '' && env.PACKAGIST_TOKEN != '' }}
         env:
           PACKAGIST_USERNAME: ${{ secrets.PACKAGIST_USERNAME }}
           PACKAGIST_TOKEN: ${{ secrets.PACKAGIST_TOKEN }}
