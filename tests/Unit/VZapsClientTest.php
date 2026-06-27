@@ -129,8 +129,9 @@ final class VZapsClientTest extends TestCase
 
     /**
      * @param list<Response> $responses
+     * @param array<int, array<string, mixed>>|\ArrayAccess<int, array<string, mixed>> $history
      */
-    private function client(array $responses, array &$history, ?callable $webSocketFactory = null): VZapsClient
+    private function client(array $responses, array|\ArrayAccess &$history, ?callable $webSocketFactory = null): VZapsClient
     {
         $mock = new MockHandler($responses);
         $stack = HandlerStack::create($mock);
