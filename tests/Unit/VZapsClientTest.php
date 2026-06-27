@@ -129,6 +129,7 @@ final class VZapsClientTest extends TestCase
      */
     private function client(array $responses, ?callable $webSocketFactory = null): array
     {
+        /** @var list<array{request: \Psr\Http\Message\RequestInterface}> $history */
         $history = [];
         $mock = new MockHandler($responses);
         $stack = HandlerStack::create($mock);
