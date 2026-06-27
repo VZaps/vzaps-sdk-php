@@ -36,8 +36,6 @@ final class DefaultWebSocketConnection implements WebSocketConnection
 
     public function close(int $code = 1000, string $reason = 'Client closed subscription'): void
     {
-        if (method_exists($this->client, 'close')) {
-            $this->client->close($code, $reason);
-        }
+        $this->client->close($code, $reason);
     }
 }
