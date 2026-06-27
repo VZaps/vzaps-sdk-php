@@ -23,12 +23,11 @@ final class VZapsClientTest extends TestCase
 {
     public function testCachesTokenAndSendsAuthHeaders(): void
     {
-        $history = [];
-        $client = $this->client([
+        ['client' => $client, 'history' => $history] = $this->client([
             new Response(200, [], '{"access_token":"jwt-token","expires_in":3600}'),
             new Response(200, [], '{"items":[]}'),
             new Response(200, [], '{"items":[]}'),
-        ], $history);
+        ]);
 
         $client->instances()->list();
         $client->instances()->list();
@@ -42,11 +41,10 @@ final class VZapsClientTest extends TestCase
 
     public function testSerializesCreateInstanceRequestToSnakeCase(): void
     {
-        $history = [];
-        $client = $this->client([
+        ['client' => $client, 'history' => $history] = $this->client([
             new Response(200, [], '{"access_token":"jwt-token","expires_in":3600}'),
             new Response(200, [], '{"id":"instance-1"}'),
-        ], $history);
+        ]);
 
         $client->instances()->create(new InstanceCreateRequest(
             name: 'Support',
@@ -62,11 +60,10 @@ final class VZapsClientTest extends TestCase
 
     public function testMessageRequestUsesInstanceHeaderAndRemovesInstanceFieldsFromBody(): void
     {
-        $history = [];
-        $client = $this->client([
+        ['client' => $client, 'history' => $history] = $this->client([
             new Response(200, [], '{"access_token":"jwt-token","expires_in":3600}'),
             new Response(200, [], '{"ok":true}'),
-        ], $history);
+        ]);
 
         $client->messages()->sendText(new SendTextMessageRequest(
             instanceId: 'instance-1',
@@ -85,11 +82,10 @@ final class VZapsClientTest extends TestCase
 
     public function testMapsRateLimitErrors(): void
     {
-        $history = [];
-        $client = $this->client([
+        ['client' => $client] = $this->client([
             new Response(200, [], '{"access_token":"jwt-token","expires_in":3600}'),
             new Response(429, ['X-Request-Id' => 'req_123'], '{"message":"Slow down","code":"rate_limited"}'),
-        ], $history);
+        ]);
 
         $this->expectException(VZapsRateLimitException::class);
         $this->expectExceptionMessage('Slow down');
@@ -99,14 +95,13 @@ final class VZapsClientTest extends TestCase
 
     public function testRealtimeDispatchesHandlersAndAcknowledgesEvents(): void
     {
-        $history = [];
         $fakeSocket = new FakeWebSocketConnection([
             '{"id":"evt_1","type":"Message","instance_id":"instance-1","created_at":"2026-01-01T00:00:00Z","data":{"text":"hi"}}',
         ]);
 
         $client = $this->client([
             new Response(200, [], '{"access_token":"jwt-token","expires_in":3600}'),
-        ], $history, static fn (string $url, array $headers): WebSocketConnection => $fakeSocket);
+        ], static fn (string $url, array $headers): WebSocketConnection => $fakeSocket)['client'];
 
         $subscription = $client->events()->subscribe(new EventSubscribeRequest(
             instanceId: 'instance-1',
@@ -129,15 +124,17 @@ final class VZapsClientTest extends TestCase
 
     /**
      * @param list<Response> $responses
-     * @param array<int, array<string, mixed>>|\ArrayAccess<int, array<string, mixed>> $history
+     *
+     * @return array{client: VZapsClient, history: list<array{request: \Psr\Http\Message\RequestInterface}>}
      */
-    private function client(array $responses, array|\ArrayAccess &$history, ?callable $webSocketFactory = null): VZapsClient
+    private function client(array $responses, ?callable $webSocketFactory = null): array
     {
+        $history = [];
         $mock = new MockHandler($responses);
         $stack = HandlerStack::create($mock);
         $stack->push(Middleware::history($history));
 
-        return new VZapsClient(new VZapsClientOptions(
+        $client = new VZapsClient(new VZapsClientOptions(
             clientToken: 'client-token',
             clientSecret: 'client-secret',
             baseUrl: 'https://api.test',
@@ -145,6 +142,8 @@ final class VZapsClientTest extends TestCase
             httpClient: new Client(['handler' => $stack, 'http_errors' => false]),
             webSocketFactory: $webSocketFactory,
         ));
+
+        return ['client' => $client, 'history' => $history];
     }
 }
 
