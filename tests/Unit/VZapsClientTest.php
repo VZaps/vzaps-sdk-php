@@ -125,12 +125,11 @@ final class VZapsClientTest extends TestCase
     /**
      * @param list<Response> $responses
      *
-     * @return array{client: VZapsClient, history: list<array{request: \Psr\Http\Message\RequestInterface}>}
+     * @return array{client: VZapsClient, history: \ArrayObject<int, array{request: \Psr\Http\Message\RequestInterface}>}
      */
     private function client(array $responses, ?callable $webSocketFactory = null): array
     {
-        /** @var list<array{request: \Psr\Http\Message\RequestInterface}> $history */
-        $history = [];
+        $history = new \ArrayObject();
         $mock = new MockHandler($responses);
         $stack = HandlerStack::create($mock);
         $stack->push(Middleware::history($history));
