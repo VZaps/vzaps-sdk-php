@@ -201,7 +201,23 @@ final class VZapsHttpClient
             $this->throwForStatus($statusCode, $data, $rawBody, $response);
         }
 
-        return new VZapsHttpResponse($statusCode, $response->getHeaders(), $data, $rawBody);
+        return new VZapsHttpResponse($statusCode, $this->normalizeHeaders($response->getHeaders()), $data, $rawBody);
+    }
+
+    /**
+     * @param array<string, array<int, string>> $headers
+     *
+     * @return array<string, list<string>>
+     */
+    private function normalizeHeaders(array $headers): array
+    {
+        $normalized = [];
+
+        foreach ($headers as $name => $values) {
+            $normalized[$name] = array_values($values);
+        }
+
+        return $normalized;
     }
 
     private function throwForStatus(int $statusCode, mixed $data, string $rawBody, ResponseInterface $response): never

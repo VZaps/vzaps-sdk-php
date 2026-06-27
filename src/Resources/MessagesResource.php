@@ -9,6 +9,9 @@ use VZaps\Sdk\VZapsRequestOptions;
 
 final class MessagesResource extends BaseResource
 {
+    /**
+     * @param SendTextMessageRequest|array<string, mixed> $request
+     */
     public function sendText(SendTextMessageRequest|array $request): mixed
     {
         return $this->message('POST', '/chat/send/text', $request);
@@ -145,6 +148,9 @@ final class MessagesResource extends BaseResource
         return $this->message('POST', '/chat/downloaddocument', $request);
     }
 
+    /**
+     * @param array<string, mixed> $body
+     */
     public function send(string $instanceId, string $path, array $body, ?string $instanceToken = null): mixed
     {
         return $this->sendRequest('POST', '/instances/' . $this->esc($instanceId) . '/chat/' . ltrim($path, '/'), $body, new VZapsRequestOptions(instanceToken: $instanceToken));

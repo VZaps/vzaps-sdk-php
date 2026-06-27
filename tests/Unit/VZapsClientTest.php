@@ -130,7 +130,7 @@ final class VZapsClientTest extends TestCase
 
     /**
      * @param list<Response> $responses
-     * @param list<array{request: RequestInterface}> $history
+     * @param array<int, array{request: RequestInterface, options?: array<string, mixed>, response?: ResponseInterface, error?: \Throwable}> $history
      */
     private function client(array $responses, array &$history, ?callable $webSocketFactory = null): VZapsClient
     {

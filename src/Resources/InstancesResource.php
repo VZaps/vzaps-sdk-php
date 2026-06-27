@@ -10,11 +10,17 @@ use VZaps\Sdk\VZapsRequestOptions;
 
 final class InstancesResource extends BaseResource
 {
+    /**
+     * @param InstanceCreateRequest|array<string, mixed> $request
+     */
     public function create(InstanceCreateRequest|array $request): mixed
     {
         return $this->sendRequest('PUT', '/instances/create', $request);
     }
 
+    /**
+     * @param InstanceListRequest|array<string, mixed>|null $request
+     */
     public function list(InstanceListRequest|array|null $request = null): mixed
     {
         $body = $request instanceof InstanceListRequest ? $request->toArray() : $this->toArray($request);
@@ -38,6 +44,9 @@ final class InstancesResource extends BaseResource
         return $this->sendRequest('POST', '/instances/get', ['id' => $instanceId]);
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public function update(string $instanceId, array $data, ?string $instanceToken = null): mixed
     {
         return $this->sendRequest('PATCH', '/instances/' . $this->esc($instanceId), $data, new VZapsRequestOptions(instanceToken: $instanceToken));
@@ -53,16 +62,25 @@ final class InstancesResource extends BaseResource
         return $this->sendRequest('DELETE', '/instances/' . $this->esc($instanceId), options: new VZapsRequestOptions(instanceToken: $instanceToken));
     }
 
+    /**
+     * @param InstanceCreateRequest|array<string, mixed> $request
+     */
     public function provision(InstanceCreateRequest|array $request): mixed
     {
         return $this->sendRequest('PUT', '/instances/provision', $request);
     }
 
+    /**
+     * @param array<string, mixed> $request
+     */
     public function search(array $request): mixed
     {
         return $this->sendRequest('POST', '/instances/search', $request);
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public function subscribe(string $instanceId, array $data = [], ?string $instanceToken = null): mixed
     {
         return $this->sendRequest('POST', '/instances/' . $this->esc($instanceId) . '/subscribe', $data, new VZapsRequestOptions(instanceToken: $instanceToken));

@@ -33,7 +33,8 @@
         "friendsofphp/php-cs-fixer": "^3.64",
         "mockery/mockery": "^1.6",
         "phpstan/phpstan": "^1.11 || ^2.0",
-        "phpunit/phpunit": "^10.5 || ^11.0"
+        "phpunit/phpunit": "^10.5 || ^11.0",
+        "textalk/websocket": "^1.6"
     },
     "suggest": {
         "textalk/websocket": "Required only when using the realtime WebSocket subscription transport."

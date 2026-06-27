@@ -8,7 +8,7 @@ use VZaps\Sdk\Exceptions\VZapsRealtimeException;
 
 final class DefaultWebSocketConnection implements WebSocketConnection
 {
-    private object $client;
+    private \WebSocket\Client $client;
 
     /**
      * @param array<string, string> $headers
