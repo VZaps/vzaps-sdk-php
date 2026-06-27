@@ -4,4 +4,3 @@ parameters:
         - src
         - tests
     treatPhpDocTypesAsCertain: false
-    checkGenericClassInNonGenericObjectType: false
