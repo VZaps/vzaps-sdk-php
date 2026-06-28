@@ -1,8 +1,6 @@
 # VZaps PHP SDK
 
-[![CI](https://github.com/VZaps/vzaps-sdk-php/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/VZaps/vzaps-sdk-php/actions/workflows/ci.yml) [![SDK Documentation](https://img.shields.io/badge/SDK-Documentation-blue)](https://docs.vzaps.com/en/sdk/php/installation) [![license](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
-[![Packagist](https://img.shields.io/packagist/v/vzaps/sdk.svg)](https://packagist.org/packages/vzaps/sdk)
-[![PHP](https://img.shields.io/badge/PHP-8.1%2B-blue.svg)](https://www.php.net/)
+[![CI](https://github.com/VZaps/vzaps-sdk-php/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/VZaps/vzaps-sdk-php/actions/workflows/ci.yml) [![Packagist](https://img.shields.io/packagist/v/vzaps/sdk.svg)](https://packagist.org/packages/vzaps/sdk) [![PHP](https://img.shields.io/badge/PHP-8.1%2B-blue.svg)](https://www.php.net/) [![SDK Documentation](https://img.shields.io/badge/SDK-Documentation-blue)](https://docs.vzaps.com/en/sdk/php/installation) [![license](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
 Official PHP client for the [VZaps public API](https://docs.vzaps.com). Send WhatsApp messages, manage instances, configure webhooks, and subscribe to realtime events with a resource-oriented interface.
 
@@ -17,7 +15,7 @@ Works in **PHP 8.1+** with Composer. HTTP uses Guzzle 7 by default. WebSocket re
 - [Installation](#installation)
 - [Quick start](#quick-start)
 - [Authentication](#authentication)
-- [Configuration](#configuration)
+- [Client options](#client-options)
 - [Resources](#resources)
 - [Instance tokens](#instance-tokens)
 - [Webhooks](#webhooks)
@@ -114,14 +112,7 @@ $token = $vzaps->auth()->getAccessToken();
 
 ---
 
-## Configuration
-
-The SDK connects to the VZaps production platform automatically:
-
-| Service | Endpoint |
-| --- | --- |
-| REST API | `https://api.vzaps.com` |
-| Realtime WebSocket | `wss://realtime.vzaps.com/events/ws` |
+## Client options
 
 Pass options to `new VZapsClient(...)`:
 
@@ -129,15 +120,11 @@ Pass options to `new VZapsClient(...)`:
 | --- | --- | --- | --- |
 | `clientToken` | `string` | — | **Required.** Public client token from the dashboard. |
 | `clientSecret` | `string` | — | **Required.** Client secret used to obtain JWTs. |
-| `baseUrl` | `string` | `https://api.vzaps.com` | REST API base URL. |
-| `realtimeUrl` | `string` | `wss://realtime.vzaps.com` | Realtime WebSocket base URL. |
 | `timeoutSeconds` | `float` | `30.0` | HTTP request timeout in seconds. |
 | `tokenSkewSeconds` | `int` | `60` | Refresh JWT this many seconds before expiry. |
 | `httpClient` | `ClientInterface` | Guzzle | Custom PSR-18 HTTP client. |
 | `webSocketFactory` | `callable` | `textalk/websocket` when installed | Custom WebSocket constructor. |
 | `userAgent` | `string` | `VZaps.SDK.PHP/<version>` | Optional `User-Agent` header on HTTP requests. |
-
-No host configuration is required for production — install the package, pass your credentials, and the client targets the production API and realtime service.
 
 ---
 
@@ -199,6 +186,14 @@ Available send helpers include `sendText`, `sendImage`, `sendAudio`, `sendDocume
 | `list($request)` | `GET /instances/:id/group/list` | List groups (paginated). |
 | `get($request)` | `GET /instances/:id/group/info` | Get group metadata by `groupId`. |
 
+### `$vzaps->sessions()`
+
+| Method | HTTP | Description |
+| --- | --- | --- |
+| `status($instanceId, $instanceToken?)` | `GET /instances/:id/session/status` | Check WhatsApp login state and, when connected, live profile fields. |
+
+`GET /instances/{id}/session/status` returns `SessionStatusResponse`. When `$status->data->connected` is `true`, `$status->data` includes (in order) `phone`, `whatsappJid`, `pushName`, `businessName`, `businessProfile`, `profilePictureId`, `profilePictureUrl`, `profileUrl`, and optional `verifiedName`, `about`, `website`. When disconnected, `$status->data` only has `connected` set to `false`.
+
 Other public namespaces are available as first-class resources too: `sessions()`, `users()`, `queues()`, `typeBots()`, `chatwoot()`, and `chats()`.
 
 ### `$vzaps->request($method, $path, $body?, $options?)`
@@ -247,7 +242,7 @@ Event payloads (webhook and realtime) use **snake_case**, matching the platform.
 
 ## Realtime events
 
-Subscribe to the same events over WebSocket at **`wss://realtime.vzaps.com`**. This is the recommended path for in-app notifications, bots, and dashboards that need low-latency delivery without exposing a public webhook URL.
+Subscribe to the same events over the VZaps realtime WebSocket. This is the recommended path for in-app notifications, bots, and dashboards that need low-latency delivery without exposing a public webhook URL.
 
 Realtime is designed for CLI workers, daemons, Laravel commands, Symfony commands, and queue consumers — not for typical web request lifecycles.
 

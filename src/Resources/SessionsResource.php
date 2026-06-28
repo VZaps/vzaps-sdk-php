@@ -4,13 +4,21 @@ declare(strict_types=1);
 
 namespace VZaps\Sdk\Resources;
 
+use VZaps\Sdk\Models\Sessions\SessionStatusData;
+use VZaps\Sdk\Models\Sessions\SessionStatusResponse;
 use VZaps\Sdk\VZapsRequestOptions;
 
 final class SessionsResource extends BaseResource
 {
-    public function status(string $instanceId, ?string $instanceToken = null): mixed
+    public function status(string $instanceId, ?string $instanceToken = null): SessionStatusResponse
     {
-        return $this->sendRequest('GET', '/instances/' . $this->esc($instanceId) . '/session/status', options: new VZapsRequestOptions(instanceToken: $instanceToken));
+        $payload = $this->sendRequest('GET', '/instances/' . $this->esc($instanceId) . '/session/status', options: new VZapsRequestOptions(instanceToken: $instanceToken));
+
+        if (!is_array($payload)) {
+            return new SessionStatusResponse(0, false, new SessionStatusData(false));
+        }
+
+        return SessionStatusResponse::fromArray($payload);
     }
 
     public function qr(string $instanceId, ?string $instanceToken = null): mixed
