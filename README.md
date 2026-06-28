@@ -1,6 +1,6 @@
 # VZaps PHP SDK
 
-[![CI](https://github.com/VZaps/vzaps-sdk-php/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/VZaps/vzaps-sdk-php/actions/workflows/ci.yml)
+[![CI](https://github.com/VZaps/vzaps-sdk-php/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/VZaps/vzaps-sdk-php/actions/workflows/ci.yml) [![SDK Documentation](https://img.shields.io/badge/SDK-Documentation-blue)](https://docs.vzaps.com/en/sdk/php/installation) [![license](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Packagist](https://img.shields.io/packagist/v/vzaps/sdk.svg)](https://packagist.org/packages/vzaps/sdk)
 [![PHP](https://img.shields.io/badge/PHP-8.1%2B-blue.svg)](https://www.php.net/)
 
