@@ -199,6 +199,14 @@ Available send helpers include `sendText`, `sendImage`, `sendAudio`, `sendDocume
 | `list($request)` | `GET /instances/:id/group/list` | List groups (paginated). |
 | `get($request)` | `GET /instances/:id/group/info` | Get group metadata by `groupId`. |
 
+### `$vzaps->sessions()`
+
+| Method | HTTP | Description |
+| --- | --- | --- |
+| `status($instanceId, $instanceToken?)` | `GET /instances/:id/session/status` | Check WhatsApp login state and, when connected, live profile fields. |
+
+`GET /instances/{id}/session/status` returns `SessionStatusResponse`. When `$status->data->connected` is `true`, `$status->data` includes (in order) `phone`, `whatsappJid`, `pushName`, `businessName`, `businessProfile`, `profilePictureId`, `profilePictureUrl`, `profileUrl`, and optional `verifiedName`, `about`, `website`. When disconnected, `$status->data` only has `connected` set to `false`.
+
 Other public namespaces are available as first-class resources too: `sessions()`, `users()`, `queues()`, `typeBots()`, `chatwoot()`, and `chats()`.
 
 ### `$vzaps->request($method, $path, $body?, $options?)`
