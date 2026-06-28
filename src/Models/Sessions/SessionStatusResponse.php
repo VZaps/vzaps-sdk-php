@@ -32,6 +32,14 @@ final class SessionBusinessCategory implements VZapsModel
             'name' => $this->name,
         ];
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }
 
 final class SessionBusinessProfile implements VZapsModel
@@ -93,6 +101,14 @@ final class SessionBusinessProfile implements VZapsModel
             'email' => $this->email,
         ], static fn ($value): bool => $value !== null);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }
 
 final class SessionStatusData implements VZapsModel
@@ -153,6 +169,14 @@ final class SessionStatusData implements VZapsModel
             'website' => $this->website,
         ], static fn ($value): bool => $value !== null);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }
 
 final class SessionStatusResponse implements VZapsModel
@@ -187,5 +211,13 @@ final class SessionStatusResponse implements VZapsModel
             'success' => $this->success,
             'data' => $this->data->toArray(),
         ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 }
